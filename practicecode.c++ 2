@@ -1,0 +1,2370 @@
+// 1. LeetCode #66 — Plus One
+
+// Problem:
+// Given a number represented as an array of digits, increment it by one.
+
+// #include <iostream>
+// #include <vector>
+// using namespace std;
+
+// class Solution {
+// public:
+//     vector<int> plusOne(vector<int>& digits) {
+//         for(int i=digits.size()-1;i>=0;i--){
+//             if(digits[i]<9){
+//                 digits[i]++;
+//                 return digits;
+//             }
+//             digits[i]=0;
+//         }
+//         digits.insert(digits.begin(),1);
+//         return digits;
+//     }
+// };
+
+// int main() {
+//     Solution obj;
+//     vector<int> digits = {9,9,9};
+//     vector<int> res = obj.plusOne(digits);
+//     for(int x:res) cout<<x;
+// }
+
+
+// 2. LeetCode #118 — Pascal's Triangle
+
+// Problem:
+// Generate the first numRows of Pascal’s triangle.
+
+
+// #include <iostream>
+// #include <vector>
+// using namespace std;
+
+// class Solution {
+// public:
+//     vector<vector<int>> generate(int numRows) {
+//         vector<vector<int>> res;
+//         for(int i=0;i<numRows;i++){
+//             vector<int> row(i+1,1);
+//             for(int j=1;j<i;j++){
+//                 row[j] = res[i-1][j-1] + res[i-1][j];
+//             }
+//             res.push_back(row);
+//         }
+//         return res;
+//     }
+// };
+
+// int main() {
+//     Solution obj;
+//     int n = 5;
+//     vector<vector<int>> res = obj.generate(n);
+//     for(auto row: res){
+//         for(int x:row) cout<<x<<" ";
+//         cout<<endl;
+//     }
+// }
+
+
+// 3. LeetCode #209 — Minimum Size Subarray Sum
+
+// Problem:
+// Given an array of positive integers nums and an integer target, return the minimal length of a
+// contiguous subarray whose sum ≥ target. If none, return 0.
+
+// #include <iostream>
+// #include <vector>
+// using namespace std;
+
+// class Solution {
+// public:
+//     int minSubArrayLen(int target, vector<int>& nums) {
+//         int left=0, sum=0, minLen=INT_MAX;
+//         for(int right=0; right<nums.size(); right++){
+//             sum += nums[right];
+//             while(sum >= target){
+//                 minLen = min(minLen, right-left+1);
+//                 sum -= nums[left++];
+//             }
+//         }
+//         return minLen == INT_MAX ? 0 : minLen;
+//     }
+// };
+
+// int main() {
+//     Solution obj;
+//     vector<int> nums = {2,3,1,2,4,3};
+//     cout << obj.minSubArrayLen(7, nums);
+// }
+
+
+
+// 4. LeetCode #560 — Subarray Sum Equals K
+
+// Problem:
+// Given an integer array nums and integer k, return total number of continuous subarrays whose sum equals k.
+
+// #include <iostream>
+// #include <vector>
+// #include <unordered_map>
+// using namespace std;
+
+// class Solution {
+// public:
+//     int subarraySum(vector<int>& nums, int k) {
+//         unordered_map<int,int> mp;
+//         mp[0] = 1;
+//         int sum = 0, count = 0;
+
+//         for(int n : nums){
+//             sum += n;
+//             if(mp.count(sum - k))
+//                 count += mp[sum - k];
+//             mp[sum]++;
+//         }
+//         return count;
+//     }
+// };
+
+// int main() {
+//     Solution obj;
+//     vector<int> nums = {1,1,1};
+//     cout << obj.subarraySum(nums,2);
+// }
+
+
+// 5. LeetCode #238 — Product of Array Except Self
+
+// Problem:
+// Return an array such that each element is the product of all other elements except itself. No division allowed.
+
+
+// #include <iostream>
+// #include <vector>
+// using namespace std;
+
+// class Solution {
+// public:
+//     vector<int> productExceptSelf(vector<int>& nums) {
+//         int n = nums.size();
+//         vector<int> res(n,1);
+
+//         int prefix = 1;
+//         for(int i=0;i<n;i++){
+//             res[i] = prefix;
+//             prefix *= nums[i];
+//         }
+
+//         int suffix = 1;
+//         for(int i=n-1;i>=0;i--){
+//             res[i] *= suffix;
+//             suffix *= nums[i];
+//         }
+//         return res;
+//     }
+// };
+
+// int main() {
+//     Solution obj;
+//     vector<int> nums = {1,2,3,4};
+//     vector<int> res = obj.productExceptSelf(nums);
+//     for(int x:res) cout<<x<<" ";
+// }
+
+
+// 6. LeetCode #152 — Maximum Product Subarray
+
+// Problem:
+// Find contiguous subarray with the largest product.
+
+
+// #include <iostream>
+// #include <vector>
+// using namespace std;
+
+// class Solution {
+// public:
+//     int maxProduct(vector<int>& nums) {
+//         int maxProd = nums[0], minProd = nums[0], result = nums[0];
+
+//         for(int i=1;i<nums.size();i++){
+//             if(nums[i] < 0) swap(maxProd, minProd);
+
+//             maxProd = max(nums[i], maxProd * nums[i]);
+//             minProd = min(nums[i], minProd * nums[i]);
+
+//             result = max(result, maxProd);
+//         }
+//         return result;
+//     }
+// };
+
+// int main() {
+//     Solution obj;
+//     vector<int> nums = {2,3,-2,4};
+//     cout << obj.maxProduct(nums);
+// }
+
+
+// 7. LeetCode #11 — Container With Most Water
+
+// Problem:
+// Find two lines that together with x-axis form a container holding the most water.
+
+
+// #include <iostream>
+// #include <vector>
+// using namespace std;
+
+// class Solution {
+// public:
+//     int maxArea(vector<int>& height) {
+//         int left=0, right=height.size()-1;
+//         int maxWater = 0;
+
+//         while(left < right){
+//             int h = min(height[left], height[right]);
+//             maxWater = max(maxWater, h * (right-left));
+
+//             if(height[left] < height[right]) left++;
+//             else right--;
+//         }
+//         return maxWater;
+//     }
+// };
+
+// int main() {
+//     Solution obj;
+//     vector<int> h = {1,8,6,2,5,4,8,3,7};
+//     cout << obj.maxArea(h);
+// }
+
+
+// 8. LeetCode #41 — First Missing Positive
+// Problem:
+// Given an unsorted integer array nums, return the smallest missing positive integer.
+// Constraint: must run in O(n) time and use constant extra space.
+
+
+// #include <iostream>
+// #include <vector>
+// using namespace std;
+
+// class Solution {
+// public:
+//     int firstMissingPositive(vector<int>& nums) {
+//         int n = nums.size();
+
+//         for(int i=0;i<n;i++){
+//             while(nums[i] > 0 && nums[i] <= n && nums[nums[i]-1] != nums[i]){
+//                 swap(nums[i], nums[nums[i]-1]);
+//             }
+//         }
+
+//         for(int i=0;i<n;i++){
+//             if(nums[i] != i+1) return i+1;
+//         }
+//         return n+1;
+//     }
+// };
+
+// int main() {
+//     Solution obj;
+//     vector<int> nums = {3,4,-1,1};
+//     cout << obj.firstMissingPositive(nums);
+// }
+
+
+
+// 9. LeetCode #128 — Longest Consecutive Sequence
+// Problem:
+// Given an unsorted array, return the length of the longest consecutive elements sequence.
+// Must run in O(n) time.
+
+
+// #include <iostream>
+// #include <vector>
+// #include <unordered_set>
+// using namespace std;
+
+// class Solution {
+// public:
+//     int longestConsecutive(vector<int>& nums) {
+//         unordered_set<int> s(nums.begin(), nums.end());
+//         int longest = 0;
+
+//         for(int num : s){
+//             if(!s.count(num-1)){ // start of sequence
+//                 int curr = num;
+//                 int streak = 1;
+
+//                 while(s.count(curr+1)){
+//                     curr++;
+//                     streak++;
+//                 }
+//                 longest = max(longest, streak);
+//             }
+//         }
+//         return longest;
+//     }
+// };
+
+// int main() {
+//     Solution obj;
+//     vector<int> nums = {100,4,200,1,3,2};
+//     cout << obj.longestConsecutive(nums);
+// }
+
+
+
+
+// 10. LeetCode #75 — Sort Colors
+
+// Problem:
+// Sort an array containing only 0, 1, and 2 (Dutch National Flag problem) in-place.
+
+
+// #include <iostream>
+// #include <vector>
+// using namespace std;
+
+// class Solution {
+// public:
+//     void sortColors(vector<int>& nums) {
+//         int low = 0, mid = 0, high = nums.size()-1;
+
+//         while(mid <= high){
+//             if(nums[mid] == 0){
+//                 swap(nums[low++], nums[mid++]);
+//             }
+//             else if(nums[mid] == 1){
+//                 mid++;
+//             }
+//             else{
+//                 swap(nums[mid], nums[high--]);
+//             }
+//         }
+//     }
+// };
+
+// int main() {
+//     Solution obj;
+//     vector<int> nums = {2,0,2,1,1,0};
+//     obj.sortColors(nums);
+//     for(int x:nums) cout<<x<<" ";
+// }
+Bus itne hi krne
+Hai
+?
+🔹 1. LeetCode #24 — Swap Nodes in Pairs
+
+#include <iostream>
+using namespace std;
+
+class ListNode{
+public:
+    int val;
+    ListNode* next;
+    ListNode(int x):val(x),next(nullptr){}
+};
+
+class Solution{
+public:
+    ListNode* swapPairs(ListNode* head){
+        ListNode dummy(0);
+        dummy.next=head;
+        ListNode* curr=&dummy;
+
+        while(curr->next && curr->next->next){
+            ListNode* first=curr->next;
+            ListNode* second=curr->next->next;
+
+            first->next=second->next;
+            second->next=first;
+            curr->next=second;
+
+            curr=first;
+        }
+        return dummy.next;
+    }
+};
+
+void print(ListNode* head){
+    while(head){ cout<<head->val<<" "; head=head->next; }
+    cout<<endl;
+}
+
+int main(){
+    Li…
+// 1. HackerRank — Hollow Pyramid
+
+
+// #include <iostream>
+// using namespace std;
+
+// class HollowPyramid {
+// public:
+//     void print(int n) {
+//         for(int i = 1; i <= n; i++) {
+//             for(int j = 1; j <= n-i; j++) cout << " ";
+
+//             for(int j = 1; j <= 2*i-1; j++) {
+//                 if(j == 1 || j == 2*i-1 || i == n)
+//                     cout << "*";
+//                 else
+//                     cout << " ";
+//             }
+//             cout << endl;
+//         }
+//     }
+// };
+
+// int main() {
+//     HollowPyramid obj;
+//     obj.print(4)
+ HackerRank — Hollow Pyramid
+
+
+// #include <iostream>
+// using namespace std;
+
+// class HollowPyramid {
+// public:
+//     void print(int n) {
+//         for(int i = 1; i <= n; i++) {
+//             for(int j = 1; j <= n-i; j++) cout << " ";
+
+//             for(int j = 1; j <= 2*i-1; j++) {
+//                 if(j == 1 || j == 2*i-1 || i == n)
+//                     cout << "*";
+//                 else
+//                     cout << " ";
+//             }
+//             cout << endl;
+//         }
+//     }
+// };
+
+// int main() {
+//     HollowPyramid obj;
+//     obj.print(4);
+// }
+
+
+
+// 2. HackerRank — Hollow Diamond
+
+// #include <iostream>
+// using namespace std;
+
+// class HollowDiamond {
+// public:
+//     void print(int n) {
+//         // upper
+//         for(int i = 1; i <= n; i++) {
+//             for(int j = 1; j <= n-i; j++) cout << " ";
+//             for(int j = 1; j <= 2*i-1; j++) {
+//                 if(j == 1 || j == 2*i-1)
+//                     cout << "*";
+//                 else
+//                     cout << " ";
+//             }
+//             cout << endl;
+//         }
+//         // lower
+//         for(int i = n-1; i >= 1; i--) {
+//             for(int j = 1; j <= n-i; j++) cout << " ";
+//             for(int j = 1; j <= 2*i-1; j++) {
+//                 if(j == 1 || j == 2*i-1)
+//                     cout << "*";
+//                 else
+//                     cout << " ";
+//             }
+//             cout << endl;
+//         }
+//     }
+// };
+
+// int main() {
+//     HollowDiamond obj;
+//     obj.print(4);
+// }
+
+
+// 3. HackerRank — Pascal Triangle Pattern (Printed)
+
+// #include <iostream>
+// using namespace std;
+
+// class Pascal {
+// public:
+//     void print(int n) {
+//         for(int i = 0; i < n; i++) {
+//             int val = 1;
+//             for(int j = 0; j <= i; j++) {
+//                 cout << val << " ";
+//                 val = val * (i - j) / (j + 1);
+//             }
+//             cout << endl;
+//         }
+//     }
+// };
+
+// int main() {
+//     Pascal obj;
+//     obj.print(5);
+// }
+
+
+// 4. HackerRank — Snake Pattern Matrix
+
+
+// #include <iostream>
+// using namespace std;
+
+// class SnakeMatrix {
+// public:
+//     void print(int n, int m) {
+//         int num = 1;
+//         for(int i = 0; i < n; i++) {
+//             if(i % 2 == 0) {
+//                 for(int j = 0; j < m; j++)
+//                     cout << num++ << " ";
+//             } else {
+//                 int temp = num + m - 1;
+//                 for(int j = 0; j < m; j++)
+//                     cout << temp-- << " ";
+//                 num += m;
+//             }
+//             cout << endl;
+            
+
+//         }
+//     }
+// };
+
+// int main() {
+//     SnakeMatrix obj;
+//     obj.print(4, 5);
+// }
+
+
+// 5. HackerRank — Concentric Star Pattern
+
+// #include <iostream>
+// using namespace std;
+
+// class ConcentricStar {
+// public:
+//     void print(int n) {
+//         int size = 2*n - 1;
+
+//         for(int i = 0; i < size; i++) {
+//             for(int j = 0; j < size; j++) {
+//                 int layer = min(min(i, j), min(size-1-i, size-1-j));
+//                 if(layer % 2 == 0) cout << "*";
+//                 else cout << " ";
+//             }
+//             cout << endl;
+//         }
+//     }
+// };
+
+// int main() {
+//     ConcentricStar obj;
+//     obj.print(5);
+// }
+
+// 6. HackerRank — Number Spiral Pattern
+
+// #include <iostream>
+// using namespace std;
+
+// class NumberSpiral {
+// public:
+//     void print(int n) {
+//         int size = 2*n - 1;
+
+//         for(int i = 0; i < size; i++) {
+//             for(int j = 0; j < size; j++) {
+//                 int val = n - min(min(i,j), min(size-1-i, size-1-j));
+//                 cout << val << " ";
+//             }
+//             cout << endl;
+//         }
+//     }
+// };
+
+// int main() {
+//     NumberSpiral obj;
+//     obj.print(4);
+// }
+
+
+// 7. HackerRank — Character Diamond Pattern
+
+// #include <iostream>
+// using namespace std;
+
+// class CharDiamond {
+// public:
+//     void print(int n) {
+        
+//         for(int i = 0; i < n; i++) {
+//             for(int j = 0; j < n-i-1; j++) cout << " ";
+//             for(int j = 0; j <= i; j++) cout << char('A'+j);
+//             for(int j = i-1; j >= 0; j--) cout << char('A'+j);
+//             cout << endl;
+//         }
+        
+//         for(int i = n-2; i >= 0; i--) {
+//             for(int j = 0; j < n-i-1; j++) cout << " ";
+//             for(int j = 0; j <= i; j++) cout << char('A'+j);
+//             for(int j = i-1; j >= 0; j--) cout << char('A'+j);
+//             cout << endl;
+//         }
+//     }
+// };
+
+// int main() {
+//     CharDiamond obj;
+//     obj.print(5);
+// }
+
+
+// 8. HackerRank – Checkerboard Pattern
+// #include <iostream>
+// using namespace std;
+
+// int main() {
+//     int n, m;
+//     cin >> n >> m;
+
+//     for(int i = 0; i < n; i++) {
+//         for(int j = 0; j < m; j++) {
+//             if((i + j) % 2 == 0) cout << "*";
+//             else cout << "#";
+//         }
+//         cout << endl;
+//     }
+//     return 0;
+// }
+
+
+// 9. HackerRank — Printing Pattern 
+// Problem Description
+
+// Print a square pattern of size 2n-1 where numbers decrease towards center.
+
+// Example (n = 3):
+
+// 3 3 3 3 3
+// 3 2 2 2 3
+// 3 2 1 2 3
+// 3 2 2 2 3
+// 3 3 3 3 3
+// OOP C++ Solution
+// #include <iostream>
+// using namespace std;
+
+// class Pattern {
+// public:
+//     void printPattern(int n) {
+//         int size = 2*n - 1;
+//         for(int i = 0; i < size; i++) {
+//             for(int j = 0; j < size; j++) {
+//                 int val = n - min(min(i, j), min(size-1-i, size-1-j));
+//                 cout << val << " ";
+//             }
+//             cout << endl;
+//         }
+//     }
+// };
+
+// int main() {
+//     Pattern obj;
+//     obj.printPattern(3);
+// }
+
+// 10. HackerRank — Rangoli Pattern
+// Problem Description
+
+// Print alphabet rangoli of size n.
+
+// Example (n = 3):
+
+// ----c----
+// --c-b-c--
+// c-b-a-b-c
+// --c-b-c--
+// ----c----
+
+// #include <iostream>
+// using namespace std;
+
+// class Rangoli {
+// public:
+//       Rangoli(int n) {
+//         int width = 4*n - 3;
+
+//         for(int i = 0; i < n; i++) {
+//             string s = "";
+//             for(int j = n-1; j >= n-i; j--) {
+//                 s += char('a' + j);
+//                 s += "-";
+//             }
+//             s += char('a' + (n-i-1));
+//             for(int j = n-i; j < n; j++) {
+//                 s += "-";
+//                 s += char('a' + j);
+//             }
+
+//             int dash = (width - s.size()) / 2;
+//             cout << string(dash, '-') << s << string(dash, '-') << endl;
+//         }
+
+//         for(int i = n-2; i >= 0; i--) {
+//             string s = "";
+//             for(int j = n-1; j >= n-i; j--) {
+//                 s += char('a' + j);
+//                 s += "-";
+//             }
+//             s += char('a' + (n-i-1));
+//             for(int j = n-i; j < n; j++) {
+//                 s += "-";
+//                 s += char('a' + j);
+//             }
+
+//             int dash = (width - s.size()) / 2;
+//             cout << string(dash, '-') << s << string(dash, '-') << endl;
+//         }
+//     }
+// };
+
+// int main() {
+//     Rangoli r(3);
+//     return 0;
+// #include <iostream>
+using namespace std;
+class STACK{
+private:
+     int stack[100];
+     int size = 100;
+     int TOS = -1;
+public:
+
+    void push(int value){ 
+           if(TOS == size-1){
+            cout<<"stack overflow";
+            return;
+           }
+        // stack[++TOS] = value;
+        TOS++;
+        stack[TOS]= value;
+        
+    }
+   int pop(){
+    if(TOS == -1){
+        cout<<"stack Underflow";
+        return -1;
+    }
+    int y = stack[TOS];
+    TOS--;
+    return y;
+   }
+
+
+
+   void display(){
+    for(int i =0;i<TOS;i++){
+        cout<<stack[i]<<" ";
+    } 
+}};
+
+int main(){
+    Stack s1;
+    s1.push(10);
+    s1.push(20);
+    s1.push(30);
+    s1.push(40);
+    s1.display();
+    cout<<endl;
+    int a = s1.pop();
+    s1.display();
+    cout<<endl<<a;
+   return 0;
+}
+
+
+
+
+// implementation of stack usingg linked list
+#include <iostream>
+using namespace std;
+
+
+class node {
+public:
+    int data;
+    node* next;
+    node(int x) {
+        data = x;
+        next = nullptr;
+    }
+};
+
+
+class STACK {
+private:
+    node* TOS;   
+public:
+    STACK() {
+        TOS = nullptr;
+    }
+    void push(int value) {
+        node* p = new node(value);
+        if (p == nullptr) {
+            cout << "stack overflow";
+            return;
+        }
+        p->next = TOS;
+        TOS = p;
+    }
+
+    int pop() {
+        if (TOS == nullptr) {
+            cout << "Stack Underflow";
+            return -1;
+        }
+        int x = TOS->data;
+        node* temp = TOS;
+        TOS = TOS->next;
+        delete temp;
+        return x;
+    }
+
+    void display() {
+        if (TOS == nullptr) {
+            cout << "Stack is empty";
+            return;
+        }
+        node* p = TOS;
+        while (p != nullptr) {
+            cout << p->data << " -> ";
+            p = p->next;
+        }
+        cout << "NULL";
+    }
+};
+
+int main() {
+    STACK s;
+
+    s.push(10);
+    s.push(20);
+    s.push(30);
+    s.push(40);
+
+    cout << "Stack elements:\n";
+    s.display();
+
+    cout << "\n\nPopped element: " << s.pop();
+
+    cout << "\n\nStack after pop:\n";
+    s.display();
+
+    return 0;
+}
+ #include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node* next;
+
+    Node(int val) {
+        data = val;
+        next = NULL;
+    }
+};
+
+class LinkedList {
+private:
+    Node* head;
+
+public:
+    LinkedList() {
+        head = NULL;
+    }
+
+    // Insert at end (helper)
+    void insertEnd(int val) {
+        Node* newNode = new Node(val);
+
+        if (head == NULL) {
+            head = newNode;
+            return;
+        }
+
+        Node* temp = head;
+        while (temp->next != NULL)
+            temp = temp->next;
+
+        temp->next = newNode;
+    }
+
+    // Display list
+    void display() {
+        Node* temp = head;
+        while (temp != NULL) {
+            cout << temp->data << " -> ";
+            temp = temp->next;
+        }
+        cout << "NULL\n";
+    }
+
+    // 🔹 Insert BEFORE a given value
+    void insertBefore(int target, int val) {
+        Node* newNode = new Node(val);
+
+        // Case 1: Empty list
+        if (head == NULL) {
+            cout << "List is empty\n";
+            return;
+        }
+
+        // Case 2: Insert before head
+        if (head->data == target) {
+            newNode->next = head;
+            head = newNode;
+            return;
+        }
+
+        Node* prev = NULL;
+        Node* curr = head;
+
+        while (curr != NULL && curr->data != target) {
+            prev = curr;
+            curr = curr->next;
+        }
+
+        if (curr == NULL) {
+            cout << "Target not found\n";
+            return;
+        }
+
+        prev->next = newNode;
+        newNode->next = curr;
+    }
+
+    // 🔹 Delete BEFORE a given value
+    void deleteBefore(int target) {
+        // Case 1: Less than 2 nodes
+        if (head == NULL || head->next == NULL) {
+            cout << "Not enough nodes\n";
+            return;
+        }
+
+        // Case 2: Target is at head → no node before it
+        if (head->data == target) {
+            cout << "No node before target\n";
+            return;
+        }
+
+        // Case 3: Target is second node → delete head
+        if (head->next->data == target) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+            return;
+        }
+
+        Node* prevPrev = NULL;
+        Node* prev = head;
+        Node* curr = head->next;
+
+        while (curr != NULL && curr->data != target) {
+            prevPrev = prev;
+            prev = curr;
+            curr = curr->next;
+        }
+
+        if (curr == NULL) {
+            cout << "Target not found\n";
+            return;
+        }
+
+        // Delete 'prev'
+        prevPrev->next = curr;
+        delete prev;
+    }
+};
+
+int main() {
+    LinkedList list;
+
+    // Initial list
+    list.insertEnd(10);
+    list.insertEnd(20);
+    list.insertEnd(30);
+    list.insertEnd(40);
+
+    cout << "Initial List:\n";
+    list.display();
+
+    // Insert before
+    cout << "\nInsert 25 before 30:\n";
+    list.insertBefore(30, 25);
+    list.display();
+
+    // Delete before
+    cout << "\nDelete node before 30:\n";
+    list.deleteBefore(30);
+    list.display();
+
+    return 0;
+}
+#include <iostream>
+using namespace std;
+
+class BankAccount {
+private:
+    double balance;
+
+public:
+    BankAccount(double b = 0) {
+        balance = b;
+    }
+
+    // Deposit / Merge accounts
+    BankAccount operator + (const BankAccount &acc) {
+        return BankAccount(balance + acc.balance);
+    }
+
+    // Withdraw
+    BankAccount operator - (double amount) {
+        return BankAccount(balance - amount);
+    }
+
+    // Compare
+    bool operator > (const BankAccount &acc) {
+        return balance > acc.balance;
+    }
+
+    bool operator == (const BankAccount &acc) {
+        return balance == acc.balance;
+    }
+
+    // Interest (function call operator)
+    void operator()(double rate) {
+        balance += balance * rate / 100;
+    }
+
+    // Prefix ++ (bonus)
+    BankAccount operator++() {
+        balance += 500;
+        return *this;
+    }
+
+    // Output
+    friend ostream& operator<<(ostream &out, const BankAccount &acc) {
+        out << "Balance: ₹" << acc.balance;
+        return out;
+    }
+};
+
+int main() {
+    BankAccount a1(5000), a2(3000);
+
+    BankAccount a3 = a1 + a2;   // merge
+    a3 = a3 - 2000;             // withdraw
+
+    ++a1;                       // bonus
+
+    a1(10);                     // interest
+
+    if(a1 > a2)
+        cout << "a1 has more balance\n";
+
+    cout << a1 << endl;
+    cout << a3 << endl;
+
+    return 0;
+}
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Cart {
+private:
+    vector<double> prices;
+
+public:
+    // Add item
+    Cart operator + (double price) {
+        Cart temp = *this;
+        temp.prices.push_back(price);
+        return temp;
+    }
+
+    // Remove last item
+    Cart operator - (int) {
+        Cart temp = *this;
+        if(!temp.prices.empty())
+            temp.prices.pop_back();
+        return temp;
+    }
+
+    // Access item
+    double operator[](int index) {
+        return prices[index];
+    }
+
+    // Apply discount
+    void operator()(double discount) {
+        for(double &p : prices)
+            p -= p * discount / 100;
+    }
+
+    // Total
+    double total() {
+        double sum = 0;
+        for(double p : prices)
+            sum += p;
+        return sum;
+    }
+
+    // Output
+    friend ostream& operator<<(ostream &out, Cart &c) {
+        out << "Cart Total: ₹" << c.total();
+        return out;
+    }
+};
+
+int main() {
+    Cart c;
+
+    c = c + 1000;
+    c = c + 500;
+    c = c + 200;
+
+    c(10); // 10% discount
+
+    cout << "Item[1]: " << c[1] << endl;
+
+    cout << c << endl;
+
+    return 0;
+}
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Student {
+private:
+    vector<int> marks;
+
+public:
+    // Add marks
+    Student operator + (int m) {
+        Student temp = *this;
+        temp.marks.push_back(m);
+        return temp;
+    }
+
+    // Access marks
+    int operator[](int index) {
+        return marks[index];
+    }
+
+    // Average
+    double average() {
+        int sum = 0;
+        for(int m : marks)
+            sum += m;
+        return marks.size() ? (double)sum / marks.size() : 0;
+    }
+
+    // Compare students
+    bool operator > (Student &s) {
+        return average() > s.average();
+    }
+
+    // Output
+    friend ostream& operator<<(ostream &out, Student &s) {
+        out << "Average Marks: " << s.average();
+        return out;
+    }
+};
+
+int main() {
+    Student s1, s2;
+
+    s1 = s1 + 80;
+    s1 = s1 + 90;
+
+    s2 = s2 + 70;
+    s2 = s2 + 60;
+
+    if(s1 > s2)
+        cout << "s1 is topper\n";
+
+    cout << s1 << endl;
+    cout << s2 << endl;
+
+    return 0;
+}
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Student {
+private:
+    vector<int> marks;
+
+public:
+    // Add marks
+    Student operator + (int m) {
+        Student temp = *this;
+        temp.marks.push_back(m);
+        return temp;
+    }
+
+    // Access marks
+    int operator[](int index) {
+        return marks[index];
+    }
+
+    // Average
+    double average() {
+        int sum = 0;
+        for(int m : marks)
+            sum += m;
+        return marks.size() ? (double)sum / marks.size() : 0;
+    }
+
+    // Compare students
+    bool operator > (Student &s) {
+        return average() > s.average();
+    }
+
+    // Output
+    friend ostream& operator<<(ostream &out, Student &s) {
+        out << "Average Marks: " << s.average();
+        return out;
+    }
+};
+
+int main() {
+    Student s1, s2;
+
+    s1 = s1 + 80;
+    s1 = s1 + 90;
+
+    s2 = s2 + 70;
+    s2 = s2 + 60;
+
+    if(s1 > s2)
+        cout << "s1 is topper\n";
+
+    cout << s1 << endl;
+    cout << s2 << endl;
+
+    return 0;
+}
+#include <iostream>
+using namespace std;
+
+class Time {
+private:
+    int hours, minutes;
+
+    void normalize() {
+        hours += minutes / 60;
+        minutes %= 60;
+    }
+
+public:
+    Time(int h=0, int m=0) {
+        hours = h;
+        minutes = m;
+        normalize();
+    }
+
+    // Add time
+    Time operator + (const Time &t) {
+        return Time(hours + t.hours, minutes + t.minutes);
+    }
+
+    // Subtract time
+    Time operator - (const Time &t) {
+        int total1 = hours*60 + minutes;
+        int total2 = t.hours*60 + t.minutes;
+        int diff = total1 - total2;
+        return Time(diff/60, diff%60);
+    }
+
+    // Compare
+    bool operator > (const Time &t) {
+        return (hours*60 + minutes) > (t.hours*60 + t.minutes);
+    }
+
+    // Increment minute
+    Time operator++() {
+        minutes++;
+        normalize();
+        return *this;
+    }
+
+    // Output
+    friend ostream& operator<<(ostream &out, const Time &t) {
+        out << t.hours << "h " << t.minutes << "m";
+        return out;
+    }
+};
+
+int main() {
+    Time t1(2, 50), t2(1, 30);
+
+    Time t3 = t1 + t2;
+    Time t4 = t1 - t2;
+
+    ++t1;
+
+    if(t1 > t2)
+        cout << "t1 is greater\n";
+
+    cout << t3 << endl;
+    cout << t4 << endl;
+
+    return 0;
+}
+#include <iostream>
+using namespace std;
+
+class Complex {
+private:
+    double real, imag;
+
+public:
+    Complex(double r=0, double i=0) {
+        real = r;
+        imag = i;
+    }
+
+    // Addition
+    Complex operator + (const Complex &c) {
+        return Complex(real + c.real, imag + c.imag);
+    }
+
+    // Subtraction
+    Complex operator - (const Complex &c) {
+        return Complex(real - c.real, imag - c.imag);
+    }
+
+    // Multiplication
+    Complex operator * (const Complex &c) {
+        return Complex(real*c.real - imag*c.imag,
+                       real*c.imag + imag*c.real);
+    }
+
+    // Equality
+    bool operator == (const Complex &c) {
+        return real == c.real && imag == c.imag;
+    }
+
+    // Output
+    friend ostream& operator<<(ostream &out, const Complex &c) {
+        out << c.real << " + " << c.imag << "i";
+        return out;
+    }
+};
+
+int main() {
+    Complex c1(2,3), c2(1,4);
+
+    Complex c3 = c1 + c2;
+    Complex c4 = c1 * c2;
+
+    cout << c3 << endl;
+    cout << c4 << endl;
+
+    return 0;
+}
+#include <iostream>
+using namespace std;
+
+class Product {
+private:
+    string name;
+    int quantity;
+
+public:
+    Product(string n="", int q=0) {
+        name = n;
+        quantity = q;
+    }
+
+    // Add stock
+    Product operator + (int q) {
+        return Product(name, quantity + q);
+    }
+
+    // Remove stock
+    Product operator - (int q) {
+        return Product(name, quantity - q);
+    }
+
+    // Compare stock
+    bool operator > (const Product &p) {
+        return quantity > p.quantity;
+    }
+
+    // Output
+    friend ostream& operator<<(ostream &out, const Product &p) {
+        out << p.name << " | Quantity: " << p.quantity;
+        return out;
+    }
+};
+
+int main() {
+    Product p1("Laptop", 10);
+    Product p2("Phone", 5);
+
+    p1 = p1 + 5;
+    p1 = p1 - 3;
+
+    if(p1 > p2)
+        cout << "p1 has more stock\n";
+
+    cout << p1 << endl;
+
+    return 0;
+}
+#include <iostream>
+using namespace std;
+
+class Vector2D {
+private:
+    int x, y;
+
+public:
+    Vector2D(int a=0, int b=0) {
+        x = a;
+        y = b;
+    }
+
+    // Add vectors
+    Vector2D operator + (const Vector2D &v) {
+        return Vector2D(x + v.x, y + v.y);
+    }
+
+    // Subtract vectors
+    Vector2D operator - (const Vector2D &v) {
+        return Vector2D(x - v.x, y - v.y);
+    }
+
+    // Scalar multiply
+    Vector2D operator * (int k) {
+        return Vector2D(x * k, y * k);
+    }
+
+    // Compare magnitude
+    bool operator > (const Vector2D &v) {
+        int mag1 = x*x + y*y;
+        int mag2 = v.x*v.x + v.y*v.y;
+        return mag1 > mag2;
+    }
+
+    // Output
+    friend ostream& operator<<(ostream &out, const Vector2D &v) {
+        out << "(" << v.x << ", " << v.y << ")";
+        return out;
+    }
+};
+
+int main() {
+    Vector2D v1(2,3), v2(1,4);
+
+    Vector2D v3 = v1 + v2;
+    Vector2D v4 = v1 * 3;
+
+    if(v1 > v2)
+        cout << "v1 is larger vector\n";
+
+    cout << v3 << endl;
+    cout << v4 << endl;
+
+    return 0;
+}
+#include <iostream>
+using namespace std;
+
+class Matrix {
+private:
+    int a[2][2];
+
+public:
+    Matrix() {
+        for(int i=0;i<2;i++)
+            for(int j=0;j<2;j++)
+                a[i][j] = 0;
+    }
+
+    void input() {
+        for(int i=0;i<2;i++)
+            for(int j=0;j<2;j++)
+                cin >> a[i][j];
+    }
+
+    // Addition
+    Matrix operator + (const Matrix &m) {
+        Matrix temp;
+        for(int i=0;i<2;i++)
+            for(int j=0;j<2;j++)
+                temp.a[i][j] = a[i][j] + m.a[i][j];
+        return temp;
+    }
+
+    // Multiplication
+    Matrix operator * (const Matrix &m) {
+        Matrix temp;
+        for(int i=0;i<2;i++)
+            for(int j=0;j<2;j++) {
+                temp.a[i][j] = 0;
+                for(int k=0;k<2;k++)
+                    temp.a[i][j] += a[i][k] * m.a[k][j];
+            }
+        return temp;
+    }
+
+    // Output
+    friend ostream& operator<<(ostream &out, const Matrix &m) {
+        for(int i=0;i<2;i++) {
+            for(int j=0;j<2;j++)
+                out << m.a[i][j] << " ";
+            out << endl;
+        }
+        return out;
+    }
+};
+
+int main() {
+    Matrix m1, m2;
+
+    cout << "Enter Matrix 1:\n";
+    m1.input();
+
+    cout << "Enter Matrix 2:\n";
+    m2.input();
+
+    Matrix sum = m1 + m2;
+    Matrix prod = m1 * m2;
+
+    cout << "\nSum:\n" << sum;
+    cout << "\nProduct:\n" << prod;
+
+    return 0;
+}
+#include <iostream>
+using namespace std;
+
+class FileSize {
+private:
+    int mb; // size in MB
+
+public:
+    FileSize(int m=0) {
+        mb = m;
+    }
+
+    // Combine files
+    FileSize operator + (const FileSize &f) {
+        return FileSize(mb + f.mb);
+    }
+
+    // Delete size
+    FileSize operator - (int size) {
+        return FileSize(mb - size);
+    }
+
+    // Compare sizes
+    bool operator > (const FileSize &f) {
+        return mb > f.mb;
+    }
+
+    // Convert to GB (function call)
+    double operator()() {
+        return mb / 1024.0;
+    }
+
+    // Output
+    friend ostream& operator<<(ostream &out, const FileSize &f) {
+        out << f.mb << " MB";
+        return out;
+    }
+};
+
+int main() {
+    FileSize f1(2048), f2(1024);
+
+    FileSize total = f1 + f2;
+    total = total - 500;
+
+    if(f1 > f2)
+        cout << "f1 is larger\n";
+
+    cout << total << endl;
+    cout << "In GB: " << total() << endl;
+
+    return 0;
+}
+#include <iostream>
+using namespace std;
+
+class Character {
+private:
+    string name;
+    int health;
+
+public:
+    Character(string n="", int h=100) {
+        name = n;
+        health = h;
+    }
+
+    // Gain health
+    Character operator + (int h) {
+        return Character(name, health + h);
+    }
+
+    // Damage
+    Character operator - (int d) {
+        return Character(name, health - d);
+    }
+
+    // Compare strength (health)
+    bool operator > (const Character &c) {
+        return health > c.health;
+    }
+
+    // Level up
+    Character operator++() {
+        health += 20;
+        return *this;
+    }
+
+    // Output
+    friend ostream& operator<<(ostream &out, const Character &c) {
+        out << c.name << " | Health: " << c.health;
+        return out;
+    }
+};
+
+int main() {
+    Character p1("Hero", 100), p2("Enemy", 80);
+
+    p1 = p1 + 30;   // heal
+    p1 = p1 - 50;   // damage
+
+    ++p1;           // level up
+
+    if(p1 > p2)
+        cout << "Hero is stronger\n";
+
+    cout << p1 << endl;
+    cout << p2 << endl;
+
+    return 0;
+}
+#include <iostream>
+#include <fstream>
+#include <cstring>
+using namespace std;
+
+class Student {
+public:
+    int id;
+    char name[50];
+    float marks;
+
+    void input() {
+        cout << "Enter Student ID: ";
+        cin >> id;
+        cout << "Enter Student Name: ";
+        cin >> name;
+        cout << "Enter Student Marks: ";
+        cin >> marks;
+    }
+
+    void display() {
+        cout << "ID: " << id << endl;
+        cout << "Name: " << name << endl;
+        cout << "Marks: " << marks << endl;
+    }
+};
+
+// Add Student
+void addStudent() {
+    Student s;
+    ofstream file("student.txt", ios::app | ios::binary);
+
+    s.input();
+    file.write((char*)&s, sizeof(s));
+    file.close();
+
+    cout << "Record Added Successfully\n";
+}
+
+// View All Students
+void viewStudent() {
+    Student s;
+    ifstream file("student.txt", ios::in | ios::binary);
+
+    while (file.read((char*)&s, sizeof(s))) {
+        s.display();
+        cout << "-------------------\n";
+    }
+
+    file.close();
+}
+
+// Search Student by ID
+void searchStudent() {
+    Student s;
+    int id, found = 0;
+
+    cout << "Enter ID to search: ";
+    cin >> id;
+
+    ifstream file("student.txt", ios::in | ios::binary);
+
+    while (file.read((char*)&s, sizeof(s))) {
+        if (s.id == id) {
+            s.display();
+            found = 1;
+        }
+    }
+
+    file.close();
+
+    if (!found)
+        cout << "No student found\n";
+}
+
+// Delete Student
+void deleteStudent() {
+    Student s;
+    int id, found = 0;
+
+    cout << "Enter ID to delete: ";
+    cin >> id;
+
+    ifstream file("student.txt", ios::in | ios::binary);
+    ofstream temp("temp.txt", ios::out | ios::binary);
+
+    while (file.read((char*)&s, sizeof(s))) {
+        if (s.id != id) {
+            temp.write((char*)&s, sizeof(s));
+        } else {
+            found = 1;
+        }
+    }
+
+    file.close();
+    temp.close();
+
+    remove("student.txt");
+    rename("temp.txt", "student.txt");
+
+    if (found)
+        cout << "Record Deleted\n";
+    else
+        cout << "Record Not Found\n";
+}
+
+// Update Student
+void updateStudent() {
+    Student s;
+    int id, found = 0;
+
+    cout << "Enter ID to update: ";
+    cin >> id;
+
+    fstream file("student.txt", ios::in | ios::out | ios::binary);
+
+    while (file.read((char*)&s, sizeof(s))) {
+        if (s.id == id) {
+            cout << "Enter new details:\n";
+            s.input();
+
+            int pos = -1 * sizeof(s);
+            file.seekp(pos, ios::cur);
+            file.write((char*)&s, sizeof(s));
+
+            found = 1;
+            break;
+        }
+    }
+
+    file.close();
+
+    if (!found)
+        cout << "Record Not Found\n";
+}
+
+// Main Menu
+int main() {
+    int ch;
+
+    do {
+        cout << "\nStudent Management System\n";
+        cout << "1. Add Student\n";
+        cout << "2. View Students\n";
+        cout << "3. Search Student\n";
+        cout << "4. Delete Student\n";
+        cout << "5. Update Student\n";
+        cout << "0. Exit\n";
+
+        cout << "Enter your choice: ";
+        cin >> ch;
+
+        switch (ch) {
+            case 1: addStudent(); break;
+            case 2: viewStudent(); break;
+            case 3: searchStudent(); break;
+            case 4: deleteStudent(); break;
+            case 5: updateStudent(); break;
+            case 0: cout << "Exiting...\n"; break;
+            default: cout << "Invalid choice\n";
+        }
+
+    } while (ch != 0);
+
+    return 0;
+}
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+class Employee {
+public:
+    int id;
+    char name[50];
+    float salary;
+
+    void input() {
+        cout << "ID: "; cin >> id;
+        cout << "Name: "; cin >> name;
+        cout << "Salary: "; cin >> salary;
+    }
+
+    void display() {
+        cout << id << " " << name << " " << salary << endl;
+    }
+};
+
+void add() {
+    Employee e;
+    ofstream f("emp.dat", ios::binary | ios::app);
+    e.input();
+    f.write((char*)&e, sizeof(e));
+}
+
+void view() {
+    Employee e;
+    ifstream f("emp.dat", ios::binary);
+    while (f.read((char*)&e, sizeof(e))) e.display();
+}
+
+void search() {
+    Employee e; int id;
+    cout << "Enter ID: "; cin >> id;
+    ifstream f("emp.dat", ios::binary);
+    while (f.read((char*)&e, sizeof(e)))
+        if (e.id == id) e.display();
+}
+int main() { add(); view(); search(); }
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+class Book {
+public:
+    int id;
+    char title[50], author[50];
+
+    void input() {
+        cin >> id >> title >> author;
+    }
+    void display() {
+        cout << id << " " << title << " " << author << endl;
+    }
+};
+
+int main() {
+    Book b;
+    ofstream f("book.dat", ios::binary | ios::app);
+    b.input();
+    f.write((char*)&b, sizeof(b));
+    f.close();
+
+    ifstream f2("book.dat", ios::binary);
+    while (f2.read((char*)&b, sizeof(b))) b.display();
+}
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+class Account {
+public:
+    int accNo;
+    char name[50];
+    float balance;
+
+    void create() { cin >> accNo >> name >> balance; }
+    void display() { cout << accNo << " " << name << " " << balance << endl; }
+
+    void deposit(float amt) { balance += amt; }
+};
+
+int main() {
+    Account a;
+    fstream f("bank.dat", ios::binary | ios::out);
+    a.create();
+    f.write((char*)&a, sizeof(a));
+    f.close();
+
+    ifstream f2("bank.dat", ios::binary);
+    f2.read((char*)&a, sizeof(a));
+    a.display();
+}
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+class Product {
+public:
+    int id, qty;
+    char name[50];
+    float price;
+
+    void input() { cin >> id >> name >> price >> qty; }
+    void display() { cout << id << " " << name << " " << price << " " << qty << endl; }
+};
+
+int main() {
+    Product p;
+    ofstream f("prod.dat", ios::binary | ios::app);
+    p.input();
+    f.write((char*)&p, sizeof(p));
+    f.close();
+
+    ifstream f2("prod.dat", ios::binary);
+    while (f2.read((char*)&p, sizeof(p))) p.display();
+}
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+class Patient {
+public:
+    int id;
+    char name[50], disease[50];
+
+    void input() { cin >> id >> name >> disease; }
+    void display() { cout << id << " " << name << " " << disease << endl; }
+};
+
+int main() {
+    Patient p;
+    ofstream f("pat.dat", ios::binary | ios::app);
+    p.input();
+    f.write((char*)&p, sizeof(p));
+    f.close();
+
+    ifstream f2("pat.dat", ios::binary);
+    while (f2.read((char*)&p, sizeof(p))) p.display();
+}
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+class Student {
+public:
+    int id;
+    char name[50];
+    int marks[3];
+
+    void input() {
+        cin >> id >> name;
+        for(int i=0;i<3;i++) cin >> marks[i];
+    }
+
+    int total() { return marks[0]+marks[1]+marks[2]; }
+
+    void display() {
+        cout << id << " " << name << " Total: " << total() << endl;
+    }
+};
+
+int main() {
+    Student s;
+    ofstream f("stu.dat", ios::binary | ios::app);
+    s.input();
+    f.write((char*)&s, sizeof(s));
+    f.close();
+
+    ifstream f2("stu.dat", ios::binary);
+    while (f2.read((char*)&s, sizeof(s))) s.display();
+}
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+class Movie {
+public:
+    int id;
+    char name[50];
+    float rating;
+
+    void input() { cin >> id >> name >> rating; }
+    void display() { cout << id << " " << name << " " << rating << endl; }
+};
+
+int main() {
+    Movie m;
+    ofstream f("mov.dat", ios::binary | ios::app);
+    m.input();
+    f.write((char*)&m, sizeof(m));
+    f.close();
+
+    ifstream f2("mov.dat", ios::binary);
+    while (f2.read((char*)&m, sizeof(m))) m.display();
+}
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+class Attendance {
+public:
+    int roll;
+    char name[50];
+    int days;
+
+    void input() { cin >> roll >> name >> days; }
+    void display() { cout << roll << " " << name << " " << days << endl; }
+};
+
+int main() {
+    Attendance a;
+    ofstream f("att.dat", ios::binary | ios::app);
+    a.input();
+    f.write((char*)&a, sizeof(a));
+    f.close();
+
+    ifstream f2("att.dat", ios::binary);
+    while (f2.read((char*)&a, sizeof(a))) a.display();
+}
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+class Booking {
+public:
+    int room;
+    char name[50];
+    int days;
+
+    void input() { cin >> room >> name >> days; }
+    void display() { cout << room << " " << name << " " << days << endl; }
+};
+
+int main() {
+    Booking b;
+    ofstream f("hotel.dat", ios::binary | ios::app);
+    b.input();
+    f.write((char*)&b, sizeof(b));
+    f.close();
+
+    ifstream f2("hotel.dat", ios::binary);
+    while (f2.read((char*)&b, sizeof(b))) b.display();
+}
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+class Order {
+public:
+    int id;
+    char name[50];
+    float amount;
+
+    void input() { cin >> id >> name >> amount; }
+    void display() { cout << id << " " << name << " " << amount << endl; }
+};
+
+int main() {
+    Order o;
+    ofstream f("order.dat", ios::binary | ios::app);
+    o.input();
+    f.write((char*)&o, sizeof(o));
+    f.close();
+
+    ifstream f2("order.dat", ios::binary);
+    while (f2.read((char*)&o, sizeof(o))) o.display();
+}
+#include<iostream>
+#include<fstream>
+using namespace std;
+
+class Student
+{
+public:
+int roll;
+char name[30];
+};
+
+int main()
+{
+Student s;
+int r;
+
+cout<<"Enter Roll to Update:";
+cin>>r;
+
+fstream file("student.dat",ios::binary|ios::in|ios::out);
+
+while(file.read((char*)&s,sizeof(s)))
+{
+if(s.roll==r)
+{
+cout<<"Enter New Name:";
+cin>>s.name;
+
+file.seekp(-sizeof(s),ios::cur);
+file.write((char*)&s,sizeof(s));
+}
+}
+
+file.close();
+}
+#include<iostream>
+#include<fstream>
+using namespace std;
+
+int main()
+{
+    ofstream file("data.txt");
+    file<<"Hello File Handling";
+    file.close();
+
+    cout<<"Data Written Successfully";
+    return 0;
+}
+#include<iostream>
+#include<fstream>
+using namespace std;
+
+int main()
+{
+    string line;
+    ifstream file("data.txt");
+
+    while(getline(file,line))
+    {
+        cout<<line<<endl;
+    }
+
+    file.close();
+    return 0;
+}
+#include<iostream>
+#include<fstream>
+using namespace std;
+
+int main()
+{
+    ofstream file("data.txt",ios::app);
+
+    file<<"\nNew Data Added";
+    file.close();
+
+    cout<<"Data Appended";
+    return 0;
+}
+#include<iostream>
+#include<fstream>
+using namespace std;
+
+class Student
+{
+int roll;
+char name[30];
+
+public:
+void input()
+{
+cout<<"Enter Roll and Name: ";
+cin>>roll>>name;
+}
+
+void write()
+{
+ofstream file("student.dat",ios::binary|ios::app);
+file.write((char*)this,sizeof(*this));
+file.close();
+}
+
+void display()
+{
+cout<<roll<<" "<<name<<endl;
+}
+};
+
+int main()
+{
+Student s;
+s.input();
+s.write();
+}
+#include<iostream>
+#include<fstream>
+using namespace std;
+
+class Student
+{
+int roll;
+char name[30];
+
+public:
+void show()
+{
+cout<<roll<<" "<<name<<endl;
+}
+};
+
+int main()
+{
+Student s;
+
+ifstream file("student.dat",ios::binary);
+
+while(file.read((char*)&s,sizeof(s)))
+{
+s.show();
+}
+
+file.close();
+}
+#include<iostream>
+#include<fstream>
+using namespace std;
+
+class Student
+{
+public:
+int roll;
+char name[30];
+
+void show()
+{
+cout<<roll<<" "<<name;
+}
+};
+
+int main()
+{
+Student s;
+int r;
+
+cout<<"Enter Roll to Search:";
+cin>>r;
+
+ifstream file("student.dat",ios::binary);
+
+while(file.read((char*)&s,sizeof(s)))
+{
+if(s.roll==r)
+s.show();
+}
+
+file.close();
+}
+#include<iostream>
+#include<fstream>
+using namespace std;
+
+int main()
+{
+char ch;
+ifstream file1("data.txt");
+ofstream file2("copy.txt");
+
+while(file1.get(ch))
+{
+file2.put(ch);
+}
+
+cout<<"Copied Successfully";
+
+file1.close();
+file2.close();
+}
+#include<iostream>
+#include<fstream>
+using namespace std;
+
+int main()
+{
+char ch;
+int count=0;
+
+ifstream file("data.txt");
+
+while(file.get(ch))
+{
+count++;
+}
+
+cout<<"Characters = "<<count;
+
+file.close();
+}
+#include<iostream>
+#include<fstream>
+using namespace std;
+
+class Student
+{
+public:
+int roll;
+char name[30];
+};
+
+int main()
+{
+Student s;
+int r;
+
+cout<<"Enter Roll Delete:";
+cin>>r;
+
+ifstream file("student.dat",ios::binary);
+ofstream temp("temp.dat",ios::binary);
+
+while(file.read((char*)&s,sizeof(s)))
+{
+if(s.roll!=r)
+temp.write((char*)&s,sizeof(s));
+}
+
+file.close();
+temp.close();
+
+remove("student.dat");
+rename("temp.dat","student.dat");
+
+cout<<"Deleted";
+}
