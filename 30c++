@@ -1,0 +1,51 @@
+#include <iostream>
+ using  namespace std;
+ class ATM{
+ private:
+     long accno;
+     int PIN;
+     double balance;
+ public:
+       bool isvalidpin(int pin){
+             if(pin == PIN)
+               return true;
+               else
+                 return false;  
+      }
+     
+      ATM(long acc_number,int pin,double balance_){
+            accno = acc_number;
+            PIN = pin;
+            balance = balance_;
+      }
+      void checkbalance(){
+       cout<<"Rs."<< balance;
+      }
+      void withdraw(double amt){
+       cout<<"enter your account pin";
+       cin>>PIN;
+       if(isvalidpin(PIN)){
+         if(amt > 0&&amt<= balance)
+           {
+              balance = balance - amt;
+            cout<<"THE AMMOUNT WITHDRAWN:Rs "<<amt<<endl;
+            cout<<"THE AMMOUNT :Rs "<<balance<<endl;
+           }
+
+            else{
+             cout<<"in valid ammount";
+            }
+       }
+       else{
+          cout<<"wrong pin";
+       }
+      }
+ };
+ int main(){
+    ATM a1(23, 1234, 1234567);
+    a1.withdraw(5);
+    a1.checkbalance();
+    return 0;
+ }
+
+
